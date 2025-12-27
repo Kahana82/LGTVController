@@ -1,0 +1,14 @@
+[Unit]
+Description=Controls LG WebOS TV at Startup
+# network is up
+After=network-online.target
+Wants=network-online.target
+
+[Service]
+Type=oneshot
+WorkingDirectory=/etc/LGTVController
+ExecStart=/usr/bin/LGTVController/LGTVController-Startup
+
+[Install]
+Alias=LGTVController-Startup.service
+WantedBy=multi-user.target

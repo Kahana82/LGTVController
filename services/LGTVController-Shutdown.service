@@ -1,0 +1,15 @@
+[Unit]
+Description=Controls LG WebOS TV at Shutdown
+DefaultDependencies=no
+Before=poweroff.target halt.target
+# not on reboot
+Conflicts=reboot.target
+
+[Service]
+Type=oneshot
+WorkingDirectory=/etc/LGTVController
+ExecStart=/usr/bin/LGTVController/LGTVController-Shutdown
+
+[Install]
+Alias=LGTVController-Shutdown.service
+WantedBy=poweroff.target halt.target

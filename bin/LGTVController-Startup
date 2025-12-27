@@ -1,0 +1,10 @@
+#!/bin/bash
+
+source /usr/bin/LGTVController/LGTVController
+
+
+TogglePowerON
+
+SwitchHDMIInput $wanted_hdmi_input_startup
+
+SwitchPictureMode $wanted_picture_mode_startup

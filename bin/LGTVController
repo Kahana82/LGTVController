@@ -1,0 +1,154 @@
+#!/bin/bash
+
+source /etc/LGTVController/LGTVController.conf
+
+
+#------ POWER ------
+
+# expected value from get_power_state when TV is on (active)
+erv_active="{'returnValue': True, 'state': 'Active'}"
+
+# expected value from get_power_state when TV is off (active standby)
+erv_standby="{'returnValue': True, 'state': 'Active Standby'}"
+
+
+function TogglePowerON() {
+
+    # get the current power state of the TV
+    tv_power_state=$(bscpylgtvcommand $tv_ip get_power_state)
+
+    # compare with the expected return value for when the TV would be OFF
+    if [[ "$tv_power_state" == "$erv_standby" ]]
+    then
+        # TV is off, turn it on.
+        rv_button_power=$(bscpylgtvcommand $tv_ip button POWER)
+        sleep 3
+
+        # get the current power state of the TV
+        tv_power_state=$(bscpylgtvcommand $tv_ip get_power_state)
+
+        # check if the TV has been turned on or not
+        if [[ "$tv_power_state" == "$erv_active" ]]
+        then
+            echo "$tv_name :: POWER - Turned ON."
+        else
+            echo "$tv_name :: POWER - Still OFF."
+        fi
+
+    else
+        echo "$tv_name :: POWER - Already ON."
+    fi
+}
+
+
+function TogglePowerOFF() {
+
+    # get the current power state of the TV
+    tv_power_state=$(bscpylgtvcommand $tv_ip get_power_state)
+
+    # compare with the expected return value for when the TV would be ON
+    if [[ "$tv_power_state" == "$erv_active" ]]
+    then
+        TV is on, turn it off.
+        rv_button_power=$(bscpylgtvcommand $tv_ip button POWER)
+
+        # get the current power state of the TV
+        tv_power_state=$(bscpylgtvcommand $tv_ip get_power_state)
+
+        # check if the TV has been turned off or not
+        if [[ "$tv_power_state" == "$erv_standby" ]]
+        then
+            echo "$tv_name :: POWER - Turned OFF."
+        else
+            echo "$tv_name :: POWER - Still ON."
+        fi
+
+    else
+        echo "$tv_name :: POWER - Already OFF."
+    fi
+}
+
+
+
+#------ INPUT ------
+
+# expected value from get_input when TV is on an hdmi input
+# where # is the number of the hdmi input
+erv_hdmi_get_input="com.webos.app.hdmi#"
+
+# expected return value from set_input when successful
+erv_hdmi_set_input="{'returnValue': True}"
+
+
+function SwitchHDMIInput() {
+    arg1_wanted_hdmi_input=$1
+
+    # expected value from get_input if TV is  using the wanted hdmi input
+    erv_wanted_hdmi_input="${erv_hdmi_get_input::-1}${arg1_wanted_hdmi_input:0-1}"
+
+    # get the current HDMI input of the TV
+    tv_hdmi_input=$(bscpylgtvcommand $tv_ip get_input)
+
+    # if the current input does not match the wanted input, then switch
+    if [[ "$tv_hdmi_input" == "$erv_wanted_hdmi_input" ]]
+    then
+        echo "$tv_name :: INPUT - Already set to $arg1_wanted_hdmi_input."
+    else
+        rv_set_input=$(bscpylgtvcommand $tv_ip set_input $arg1_wanted_hdmi_input)
+        sleep 2
+
+        # check if the TV has switched input or not
+        if [[ "$rv_set_input" == "$erv_hdmi_set_input" ]]
+        then
+            echo "$tv_name :: INPUT - Set to $arg1_wanted_hdmi_input."
+        else
+            echo "$tv_name :: INPUT - Unable to switch to $arg1_wanted_hdmi_input."
+        fi
+    fi
+}
+
+
+
+#------ PICTURE MODE ------
+
+# expected return value from set_current_picture_mode when successful
+erv_set_current_picture_mode="{'returnValue': True}"
+
+
+function SwitchPictureMode() {
+    arg1_wanted_picture_mode=$1
+
+    # todo: find a way to get the current picture mode to check what mode is on before switching instead of forcing the desired mode
+    #tv_picture_mode=$(bscpylgtvcommand $tv_ip ...)
+
+
+    # set picture mode to wanted_picture_mode
+    rv_set_current_picture_mode=$(bscpylgtvcommand $tv_ip set_current_picture_mode $arg1_wanted_picture_mode)
+
+    # check if the TV has switched picture mode or not
+    if [[ "$rv_set_current_picture_mode" == "$erv_set_current_picture_mode" ]]
+    then
+        echo "$tv_name :: PICTURE MODE - (already) set to $arg1_wanted_picture_mode."
+    else
+        echo "$tv_name :: PICTURE MODE - Unable to switch to $arg1_wanted_picture_mode."
+    fi
+}
+
+
+
+#------ HOST ------
+
+# checks if a HOST computer is alive
+function IsHOSTAlive() {
+
+    # the ping command outputs a message to stderr on error or returns 0 if it was successful
+    # using  >/dev/null  to get rid of the ping result on stdout and  2>&-  to close off stderr
+    if ping -n -c 1 -W 1 $1 >/dev/null 2>&-
+    then
+        # return value is empty or something different from 0
+        return 0
+    else
+        # ping succesful
+        return 1
+    fi
+}
