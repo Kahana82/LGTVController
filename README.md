@@ -3,8 +3,8 @@ Scripts and services to control an LG TV through WebOS with bscpylgtv
 Prerequisites:
 --------------
 - bscpylgtv
-  https://github.com/chros73/bscpylgtv
-  https://aur.archlinux.org/packages/bscpylgtv
+  GitHub : https://github.com/chros73/bscpylgtv
+     AUR : https://aur.archlinux.org/packages/bscpylgtv
 
 - the IPv4 address of the TV, found under : General - Network
   this will be used in the config file for variable "tv_ip".
