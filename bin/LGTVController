@@ -136,14 +136,36 @@ function SwitchPictureMode() {
 
 
 
-#------ HOST ------
+#------ NETWORK ------
+
+# establishes the connection/pairing between the computer and the TV
+function EstablishConnection() {
+    arg1_TVIP=$1
+
+    # check if the connection database file already exists
+    if [ -a ".aiopylgtv.sqlite" ]
+    then
+        echo "$tv_name :: CONNECTION - Pairing with the TV already established."
+    else
+        if IsHOSTAlive $arg1_TVIP
+        then
+            echo "$tv_name :: CONNECTION - Accept the prompt on the TV by pressing the remote."
+            #bscpylgtvcommand $arg1_TVIP button INFO
+            bscpylgtvcommand $arg1_TVIP get_input >/dev/null 2>&-
+        else
+            echo "$tv_name :: CONNECTION - TV with IP <$arg1_TVIP> not accessible on the network, please check your input or the value for 'tv_ip' in the config file."
+        fi
+    fi
+}
+
 
 # checks if a HOST computer is alive
 function IsHOSTAlive() {
+    arg1_HOST=$1
 
     # the ping command outputs a message to stderr on error or returns 0 if it was successful
     # using  >/dev/null  to get rid of the ping result on stdout and  2>&-  to close off stderr
-    if ping -n -c 1 -W 1 $1 >/dev/null 2>&-
+    if ping -n -c 1 -W 1 $arg1_HOST >/dev/null 2>&-
     then
         # return value is empty or something different from 0
         return 0
