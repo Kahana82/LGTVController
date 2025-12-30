@@ -1,0 +1,15 @@
+[Desktop Entry]
+Comment=
+Exec=/usr/bin/LGTVController/LGTVController-SwitchPictureMode filmMaker
+GenericName=
+Icon=input-tvremote-symbolic
+Name=LGTVController SwitchPictureMode FilmMaker
+NoDisplay=false
+Path=/etc/LGTVController
+PrefersNonDefaultGPU=false
+StartupNotify=false
+Terminal=false
+TerminalOptions=
+Type=Application
+X-KDE-SubstituteUID=false
+X-KDE-Username=
