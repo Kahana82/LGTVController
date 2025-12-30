@@ -1,0 +1,37 @@
+#!/bin/bash
+
+source /usr/bin/LGTVController/LGTVController
+
+
+# check available picture modes for your specific model / WebOS version at:
+# https://github.com/chros73/bscpylgtv/tree/master/docs
+
+
+
+# there are no arguments
+if [ $# -eq "0" ]
+then
+    echo "$tv_name :: SWITCH - Picture mode to $picture_mode_switch"
+    SwitchPictureMode $picture_mode_switch
+
+    exit 0
+fi
+
+
+# there is exactly one argument
+if [ $# -eq "1" ]
+then
+    echo "$tv_name :: SWITCH - Picture mode to $1"
+    SwitchPictureMode $1
+
+    exit 0
+fi
+
+
+# there is more than one argument
+if [ $# -gt "1" ]
+then
+    echo "$tv_name :: SWITCH - Too many arguments (there are no spaces in the single word picture mode names; fi: game)"
+
+    exit 0
+fi

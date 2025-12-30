@@ -1,0 +1,32 @@
+#!/bin/bash
+
+source /usr/bin/LGTVController/LGTVController
+
+
+# there are no arguments
+if [ $# -eq "0" ]
+then
+    echo "$tv_name :: CONNECTION - Establishing pairing with the TV on IP: $tv_ip"
+    EstablishConnection $tv_ip
+
+    exit 0
+fi
+
+
+# there is exactly one argument
+if [ $# -eq "1" ]
+then
+    echo "$tv_name :: CONNECTION - Establishing pairing with the TV on IP: $1"
+    EstablishConnection $1
+
+    exit 0
+fi
+
+
+# there is more than one argument
+if [ $# -gt "1" ]
+then
+    echo "$tv_name :: CONNECTION - Too many arguments (there are no spaces in the IP address, fi: xxx.xxx.xxx.xxx)"
+
+    exit 0
+fi
