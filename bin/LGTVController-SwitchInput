@@ -3,14 +3,34 @@
 source /usr/bin/LGTVController/LGTVController
 
 
-# if the other pc is alive then switch input, otherwise power off
-# if IsHOSTAlive $otherpc_hostname
-# then
-#     echo "$tv_name :: HOST - $otherpc_hostname online ... switching input."
-#     SwitchHDMIInput $wanted_hdmi_input_shutdown
-# fi
+# check available picture modes for your specific model / WebOS version at:
+# https://github.com/chros73/bscpylgtv#examples
 
 
-#wanted_hdmi_input_switch="HDMI_2"
+# there are no arguments
+if [ $# -eq "0" ]
+then
+    echo "$tv_name :: SWITCH - Input to $hdmi_input_switch"
+    SwitchHDMIInput $hdmi_input_switch
 
-SwitchHDMIInput $wanted_hdmi_input_switch
+    exit 0
+fi
+
+
+# there is exactly one argument
+if [ $# -eq "1" ]
+then
+    echo "$tv_name :: SWITCH - Input to $1"
+    SwitchHDMIInput $1
+
+    exit 0
+fi
+
+
+# there is more than one argument
+if [ $# -gt "1" ]
+then
+    echo "$tv_name :: SWITCH - Too many arguments (there are underscores instead of spaces in the HDMI input names, fi: HDMI_1)"
+
+    exit 0
+fi
