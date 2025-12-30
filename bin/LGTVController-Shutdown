@@ -7,7 +7,7 @@ source /usr/bin/LGTVController/LGTVController
 if IsHOSTAlive $otherpc_hostname
 then
     echo "$tv_name :: HOST - $otherpc_hostname online ... switching input."
-    SwitchHDMIInput $wanted_hdmi_input_shutdown
+    SwitchHDMIInput $hdmi_input_shutdown
 
 else
     echo "$tv_name :: HOST - $otherpc_hostname offline ... powering OFF."

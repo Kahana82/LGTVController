@@ -5,6 +5,6 @@ source /usr/bin/LGTVController/LGTVController
 
 TogglePowerON
 
-SwitchHDMIInput $wanted_hdmi_input_startup
+SwitchHDMIInput $hdmi_input_startup
 
-SwitchPictureMode $wanted_picture_mode_startup
+SwitchPictureMode $picture_mode_startup
